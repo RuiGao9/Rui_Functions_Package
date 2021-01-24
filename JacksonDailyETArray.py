@@ -11,7 +11,8 @@ def JacksonDailyETArray(LE,Latitude,DOY,t,Ratio_W_per_SquareMeter_2_mm_per_day):
     '''
     import math
     import numpy as np
-
+    
+    pi = math.pi
     a = 12 - 5.69**(-12)*Latitude - 2.02*10**(-4)*Latitude**2 + 8.25*10**(-6)*Latitude**3 - 3.15*10**(-7)*Latitude**4
     b = 0.123*Latitude - 3.10*10**(-4)*Latitude**2 + 8*10**(-7)*Latitude**3 - 4.99*10**(-7)*Latitude**4
     N = 0.945 * (a + b * math.sin(pi * (DOY+10)/365)**2);
