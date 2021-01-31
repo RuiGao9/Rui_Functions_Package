@@ -6,7 +6,7 @@ def TellTheGeoInfo(InputRaster):
     import arcpy
     import gdal
     
-    fid=gdal.Open(dir_output+"\\"+Flight_Date+"_clip.tif")
+    fid=gdal.Open(InputRaster)
     input_img=fid.GetRasterBand(1).ReadAsArray()
     dims=input_img.shape
     print("Dimension of the data is:",dims[0],dims[1])
