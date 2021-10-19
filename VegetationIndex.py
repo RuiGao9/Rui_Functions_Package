@@ -22,7 +22,7 @@ def VegetationIndex(OpticalImage,
     elif VegetationIndex == "SAVI":
         VI = (raster_nir-raster_r)*1.5/(raster_r+raster_nir+0.5)
     elif VegetationIndex == "PVI":
-        VI = (raster_nir-0.3*raster_r-0.5)/(sqrt(1+0.009))
+        VI = (raster_nir-0.3*raster_r-0.5)/(np.sqrt(1+0.009))
     elif VegetationIndex == "EVI":
         VI = 2.5*(raster_nir-raster_r)/(raster_nir+6*raster_r-7.5*raster_b+1)
     elif VegetationIndex == "CIg":
