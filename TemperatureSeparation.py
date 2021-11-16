@@ -5,6 +5,10 @@ def TemperatureSeparation(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
                           Azimuth, Altitude, 
                           MiddleProducts="No"):
     '''
+    This function is trying to consider the effect of shadow pixel. But the algorithm used in this function cannot identify the shadow pixel since
+    the upscaled DSM data (from 0.15 meter pixel to 0.6 meter pixel) cannot tell any shadow pixel. In other words, shadow information is smoothed 
+    due to the DSM data upscaling.
+    
     Parameters used in this function:
     dir_LAI: the file path of the LAI image, resolution is 3.6 meter by 3.6 meter.
     dir_RGBNIR: the file path of the optical image containing R, G, B, and NIR bands, and the resolution is 0.15 meter b 0.15 meter.
