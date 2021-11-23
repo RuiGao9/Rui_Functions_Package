@@ -34,6 +34,9 @@ def TemperatureSeparation_Shadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
     from scipy.stats import linregress
     import matplotlib.pyplot as plt
     
+    # This function is available at https://github.com/RuiGao9/Rui_Python_Functions_Package
+    %run C:\Users\grui9\Box\GitHub_Rui\Python_Functions\TellResolution.py
+    
     # RGB-NIR image processing
     # resample the optical image
     [res_x,res_y] = TellResolution(dir_RGBNIR)
