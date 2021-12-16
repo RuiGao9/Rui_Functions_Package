@@ -21,7 +21,8 @@ if modelspec == "linear"
     RMSE = mdl.RMSE;
     b1 = mdl.Coefficients.Estimate(2);
     inter = mdl.Coefficients.Estimate(1);
-    yCal = b1.*x+inter;
+    x_inter = [min(x):(max(x)-min(x))/100:max(x)]';
+    yCal = b1.*x_inter+inter;
 elseif modelspec == "purequadratic"
     mdl = fitlm(x,y,"purequadratic")
     
@@ -30,10 +31,11 @@ elseif modelspec == "purequadratic"
     b2 = mdl.Coefficients.Estimate(3);
     b1 = mdl.Coefficients.Estimate(2);
     inter = mdl.Coefficients.Estimate(1);
-    yCal = b2.*x.^2+b1.*x+inter;
+    x_inter = [min(x):(max(x)-min(x))/100:max(x)]';
+    yCal = b2.*x_inter.^2+b1.*x_inter+inter;
 end
 
-table_plot = [x,yCal];
+table_plot = [x_inter,yCal];
 table_plot = sortrows(table_plot,1);
 figure
 scatterhist(x,y,'Color','b','Kernel','on','Marker','+'); hold on
