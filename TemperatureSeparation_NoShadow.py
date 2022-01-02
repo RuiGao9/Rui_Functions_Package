@@ -1,9 +1,10 @@
-def TemperatureSeparation_Shadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM, 
-                                 NoDataValue, Veg_threshold, Soil_threshold,
-                                 band_R, band_NIR, 
-                                 cellsize_resample, 
-                                 Azimuth, Altitude, 
-                                 MiddleProducts="No"):
+def TemperatureSeparation_NoShadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
+                                   NoDataValue, Veg_threshold, Soil_threshold,
+                                   band_R, band_NIR, 
+                                   cellsize_resample,
+                                   dir_output, output_name_multiple, output_name_single,
+                                   Azimuth, Altitude, 
+                                   MiddleProducts="No"):
     '''
     The effect of shadow is considered in this function, and "Hillshade" tool from the ArcMap must be done based on the high resolution DSM data. 
     If DSM data is upscaled from 0.15 meter to 0.6 meter, details are smoothed. Normally, one 0.6 meter by 0.6 meter grid contains small number of 
@@ -21,6 +22,9 @@ def TemperatureSeparation_Shadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
     band_R: the number of layer in the optical image (multiple bands) representing the Red band.
     band_NIR: the number of layer in the optical image (multiple bands) representing the Near-infrared band.
     cellsize_resample: 0.6 meter by 0.6 meter resolution in order to calculate the vine shadow and temperature separation.
+    dir_output: the folder which will have the generated files. 
+    output_name_multiple: the name of the separated temperature result.
+    output_name_single: the name of the single-layer temperature result - temperature pixel on the shadow pixel is deleted.
     Azimuth: a parameter used for vine shadow calculation.
     Altitude: a parameter used for vine shadow calculation.
     MiddleProducts: default is "No", which means to delete the middle products. Other parameters, like "Yes" will save the middle products.
@@ -33,9 +37,6 @@ def TemperatureSeparation_Shadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
     import pandas as pd
     from scipy.stats import linregress
     import matplotlib.pyplot as plt
-    
-    # This function is available at https://github.com/RuiGao9/Rui_Python_Functions_Package
-    %run C:\Users\grui9\Box\GitHub_Rui\Python_Functions\TellResolution.py
     
     # RGB-NIR image processing
     # resample the optical image
@@ -231,11 +232,12 @@ def TemperatureSeparation_Shadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
 
     tt_canopy = np.sqrt(np.sqrt(t_canopy.copy())) + 273.15
     tt_soil = np.sqrt(np.sqrt(t_soil.copy())) + 273.15
+    tt_single_layer = (tt_canopy + tt_soil)/2
     # print(tt_canopy,"\n\n",tt_soil)
 
-    # Write the output file
+    # Write the separated temperature file
     driver = gdal.GetDriverByName('GTiff')
-    ds = driver.Create(dir_output+"\\"+output_name, dims_LAI[1], dims_LAI[0], 3, gdal.GDT_Float32)
+    ds = driver.Create(dir_output+"\\"+output_name_multiple, dims_LAI[1], dims_LAI[0], 3, gdal.GDT_Float32)
     ds.SetGeoTransform(geo_out)
     ds.SetProjection(lai_prj)
     band=ds.GetRasterBand(1)
@@ -252,6 +254,17 @@ def TemperatureSeparation_Shadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
     band.FlushCache()
     ds = None
     print("Done!!! Temperature separation is finished.")
+    # Write the single-layer temperature file (shadow pixel does not account)
+    driver = gdal.GetDriverByName('GTiff')
+    ds = driver.Create(dir_output+"\\"+output_name_single, dims_LAI[1], dims_LAI[0], 3, gdal.GDT_Float32)
+    ds.SetGeoTransform(geo_out)
+    ds.SetProjection(lai_prj)
+    band=ds.GetRasterBand(1)
+    band.WriteArray(tt_canopy)
+    band.SetNoDataValue(NoDataValue)
+    band.FlushCache()
+    ds = None
+    print("Done!!! Single-layer temperature is generated.")
     
     # delete the middle products
     if MiddleProducts == "No":
