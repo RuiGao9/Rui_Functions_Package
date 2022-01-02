@@ -10,6 +10,8 @@ def TemperatureSeparation_NoShadow(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
     If DSM data is upscaled from 0.15 meter to 0.6 meter, details are smoothed. Normally, one 0.6 meter by 0.6 meter grid contains small number of 
     shadow pixel (e.g., 3 out of 16 pixels). Therefore, this function assumpe the 0.6 meter by 0.6 meter pixel as shadow pixel once
     this piexl contains at least one shadow pixel at 0.15 meter by 0.15 meter.
+    Note: To run this function successfully, one function is needed: the function called TellResolution() can be found here: 
+            https://github.com/RuiGao9/Rui_Functions_Package/blob/main/TellResolution.py
     
     Parameters used in this function:
     dir_LAI: the file path of the LAI image, resolution is 3.6 meter by 3.6 meter.
