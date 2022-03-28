@@ -1,7 +1,9 @@
-def ImgFilter(name_out_file,dir_output,
+def ImgFilter(dir_img,
+              name_out_file,dir_output,
               value_min,value_max,value_nan):
     '''
     Eliminate the "invalid" pixel value.
+    :param dir_img: the image you want to process.
     :param name_out_file: a name with ".tif" (the extension) for the output.
     :param dir_output: a folder where you want to save the output.
     :param value_min: the lowest boundary you defined for the image - any value below this boundary will be recognized as "value_nan".
