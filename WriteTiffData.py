@@ -14,8 +14,8 @@ def WriteTiffData(floder_out, name_out_file, ysize, xsize, Array_Content, geotra
     import arcpy
 
     driver = gdal.GetDriverByName('GTiff')
-    print(floder_out + "\\" + name_out_file + ".tif")
-    new_tiff = driver.Create(floder_out + "\\" + name_out_file + ".tif", xsize, ysize, 1, gdal.GDT_Float32)
+    print(floder_out + "\\" + name_out_file)
+    new_tiff = driver.Create(floder_out + "\\" + name_out_file, xsize, ysize, 1, gdal.GDT_Float32)
     new_tiff.SetGeoTransform(geotransform)
     new_tiff.SetProjection(projection)
     new_tiff.GetRasterBand(1).WriteArray(Array_Content)
