@@ -14,6 +14,11 @@ def ImgFilter(dir_img,
     import arcpy
     import numpy as np
     
+    %run C:\Users\grui9\Box\GitHub_Rui\Python_Functions\TellResolution.py
+    %run C:\Users\grui9\Box\GitHub_Rui\Python_Functions\TellExtent.py
+    %run C:\Users\grui9\Box\GitHub_Rui\Python_Functions\TellTheGeoInfo.py
+    %run C:\Users\grui9\Box\GitHub_Rui\Python_Functions\WriteTiffData.py
+    
     img = arcpy.RasterToNumPyArray(dir_img, nodata_to_value=value_nan)
     extent = TellExtent(dir_img)
     [res_x,res_y] = TellResolution(dir_img)
