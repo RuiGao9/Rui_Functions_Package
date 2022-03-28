@@ -198,6 +198,13 @@ def TemperatureSeparation_Dual(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
             # creat a data frame without the impact of shadow pixels
             df = pd.DataFrame()
             df = pd.DataFrame({'NDVI': tmp_NDVI,'Tr': tmp_Tr})
+            # delete infinite and nan values
+#             df_soil = df_copy[(df_copy["NDVI"] <= Soil_threshold)]
+            df[df['NDVI']<0] = np.nan
+            df[df['NDVI']>1] = np.nan
+            # The temperature within [273.15,350] is recognized as valid values
+            df[df['Tr']<273.15] = np.nan
+            df[df['Tr']>350] = np.nan
             df = df.dropna()
             df = df.drop_duplicates()
             df = df.apply(pd.to_numeric, errors='coerce')
@@ -328,7 +335,7 @@ def TemperatureSeparation_Dual(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
                 else:
                     t_canopy[irow,icol] = model_final.predict([[Veg_threshold]])
                     t_soil[irow,icol] = model_final.predict([[Soil_threshold]])
-                    print(type(t_canopy[irow,icol]))
+#                     print(type(t_canopy[irow,icol]))
         #             print("Valid pixels are not sufficient for the algorithm, and estimations are made.")
         #             print("Canopy temperature is estimated:",round(t_canopy[irow,icol],2))
         #             print("Soil temperature is estimated:",round(t_soil[irow,icol],2))
@@ -379,10 +386,10 @@ def TemperatureSeparation_Dual(dir_LAI, dir_RGBNIR, dir_Tr, dir_DSM,
     #             print("The used slope and intercept for this round is:",round(renew_slope,2),round(renew_intercept,2))
             t_coeff[irow,icol] = -1*coef
             # debugging
-            diff_tmp = t_canopy[irow,icol] - t_soil[irow,icol]
-            if diff_tmp > 0:
-                print("The canopy temperature is above the soil temperature!!!")
-            else: pass
+#             diff_tmp = t_canopy[irow,icol] - t_soil[irow,icol]
+#             if diff_tmp > 0:
+#                 print("The canopy temperature is above the soil temperature!!!")
+#             else: pass
     tt_canopy = t_canopy.copy()
     tt_soil = t_soil.copy()
 
