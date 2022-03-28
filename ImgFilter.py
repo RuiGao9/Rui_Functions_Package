@@ -11,6 +11,9 @@ def ImgFilter(dir_img,
     :param value_nan: a value to define those "invalid" values.
     :return: a new image without the pixel value beyond the boundary.
     '''
+    import arcpy
+    import numpy as np
+    
     img = arcpy.RasterToNumPyArray(dir_img, nodata_to_value=value_nan)
     extent = TellExtent(dir_img)
     [res_x,res_y] = TellResolution(dir_img)
