@@ -1,6 +1,8 @@
 import arcpy
 import arcview
 import gdal
+import numpy as np
+import pandas as pd
 
     
 def TellExtent(InputFile):
