@@ -95,7 +95,7 @@ def WriteTiffData_SingleOutput(floder_and_filename, ysize, xsize, Array_Content,
     return ()
     
 def LST_CWSI(input_temp, input_boundary, output_dir, 
-             output_temp_name, output_cwsi_name):
+             output_temp_name, output_cwsi_name, NoDataValue):
     '''
     param input_temp: temperature image.
     param input_boundary: research boundary. 
