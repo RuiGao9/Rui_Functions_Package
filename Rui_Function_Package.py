@@ -126,7 +126,6 @@ def LST_CWSI(input_temp, input_boundary, output_dir,
     temp_min = np.nanmin(array_temp)
     print("The maximum temperature within the image is",round(temp_max,2),"and the minimum is",round(temp_min,2))
     img_cwsi = (array_temp-temp_min)/(temp_max-temp_min)
-    print(img_cwsi)
     # output the CWSI image
     WriteTiffData(output_dir, output_cwsi_name, dims[0], dims[1], img_cwsi, img_geo, img_prj)
     
