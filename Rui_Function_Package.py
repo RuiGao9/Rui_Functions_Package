@@ -116,9 +116,8 @@ def LST_CWSI(input_temp, input_boundary, output_dir,
     extent = TellExtent(output_dir+"\\"+output_temp_name)
     [dims,img_geo,img_prj] = TellTheGeoInfo(output_dir+"\\"+output_temp_name)
     print("Image resolution is:",round(res_tr_x,2),round(res_tr_y,2))
-    print("Image dimension is:",dims[0],dims[1])
-    print("Image geographic info:",img_geo)
-    print("Image projection info:",img_prj)
+    # print("Image geographic info:",img_geo)
+    # print("Image projection info:",img_prj)
     array_temp = arcpy.RasterToNumPyArray(output_dir+"\\"+output_temp_name, nodata_to_value = NoDataValue)
     # calculate the CWSI
     # remember, the 1st layer is the canopy temperature
@@ -128,7 +127,7 @@ def LST_CWSI(input_temp, input_boundary, output_dir,
     # output the CWSI image
     WriteTiffData(output_dir, output_cwsi_name, dims[0], dims[1], img_cwsi, img_geo, img_prj)
     
-    return print("CWSI is written!!!")
+    return print("Canopy temperature based CWSI image is generated!!!")
     
 def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out, 
                               lai_image, fc_image,
