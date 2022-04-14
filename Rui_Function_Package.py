@@ -101,7 +101,7 @@ def WriteTiffData_SingleOutput(floder_and_filename, ysize, xsize, Array_Content,
 def LST_CWSI(input_temp, input_boundary, output_dir, 
              output_temp_name, output_cwsi_name, NoDataValue):
     '''
-    param input_temp: temperature image.
+    param input_temp: 2-layer temperature image: 1st layer is canopy temperature and 2nd layer is soil temperature.
     param input_boundary: research boundary. 
     param output_dir: a folder where you want to save the results.
     param output_temp_name: a name (with ".tif") for the temperature image within the research boundary.
@@ -121,11 +121,10 @@ def LST_CWSI(input_temp, input_boundary, output_dir,
     print("Image projection info:",img_prj)
     array_temp = arcpy.RasterToNumPyArray(output_dir+"\\"+output_temp_name, nodata_to_value = NoDataValue)
     # calculate the CWSI
-    # [temp_max, temp_min] = [np.nanmax(array_temp),np.nanmin(array_temp)]
-    temp_max = np.nanmax(array_temp)
-    temp_min = np.nanmin(array_temp)
+    # remember, the 1st layer is the canopy temperature
+    [temp_max, temp_min] = [np.nanmax(array_temp[0,:,:]),np.nanmin(array_temp[0,:,:])]
     print("The maximum temperature within the image is",round(temp_max,2),"and the minimum is",round(temp_min,2))
-    img_cwsi = (array_temp-temp_min)/(temp_max-temp_min)
+    img_cwsi = (array_temp[0,:,:]-temp_min)/(temp_max-temp_min)
     # output the CWSI image
     WriteTiffData(output_dir, output_cwsi_name, dims[0], dims[1], img_cwsi, img_geo, img_prj)
     
