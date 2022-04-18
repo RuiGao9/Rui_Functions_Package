@@ -73,6 +73,31 @@ def WriteTiffData(floder_out, name_out_file, ysize, xsize, Array_Content, geotra
     new_tiff = None  # closes the file
     print("Done!!! Tiff data has been written.")
     return ()
+
+def WriteTiffData_Type(floder_and_filename, ysize, xsize, Array_Content, geotransform, projection, datatype):
+    '''
+    Writing the array with geographic information.
+    :param floder_out: directory that you wish to save this output
+    :param name_out_file: a name for the output, like "Result"
+    :param ysize: dimension on y
+    :param xsize: dimension on x
+    :param Array_Content: the array that you wish to save in the Tiff file
+    :param geotransform: geotransform information
+    :param projection: projection information
+    :param datatype: the data type for the output raster https://gdal.org/python/osgeo.gdalconst-module.html
+    :return: no return on screen, but an output in the folder
+    '''
+    
+    driver = gdal.GetDriverByName('GTiff')
+    print(floder_and_filename)
+    new_tiff = driver.Create(floder_and_filename, xsize, ysize, 1, datatype)
+    new_tiff.SetGeoTransform(geotransform)
+    new_tiff.SetProjection(projection)
+    new_tiff.GetRasterBand(1).WriteArray(Array_Content)
+    new_tiff.FlushCache()  # Saves to disk
+    new_tiff = None  # closes the file
+    print("Done!!! Tiff data has been written.")
+    return ()
     
 def WriteTiffData_SingleOutput(floder_and_filename, ysize, xsize, Array_Content, geotransform, projection):
     '''
