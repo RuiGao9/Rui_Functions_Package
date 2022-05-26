@@ -61,7 +61,7 @@ def WriteTiffData(floder_out, name_out_file, ysize, xsize, Array_Content, geotra
     :param projection: projection information
     :return: no return on screen, but an output in the folder
     '''
-    import gdal
+    # import gdal
     
     driver = gdal.GetDriverByName('GTiff')
     print(floder_out + "\\" + name_out_file)
@@ -156,7 +156,9 @@ def LST_CWSI(input_temp, input_boundary, output_dir,
     
 def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out, 
                               lai_image, fc_image,
-                              n_rn, n_h, n_le, n_g, n_t_et, pixel_size,
+                              n_rn, n_h, n_le, n_g, n_t_et, 
+                              n_ln_s, n_ln_c, n_sn_s, n_sn_c,
+                              pixel_size,
                               upper_boundary, lower_boundary, 
                               delete_tmp_files="Yes", single_layer_temp="Yes"):
     '''
@@ -170,6 +172,7 @@ def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out
     fc_image: directory of the fractional cover image.
     n_rn, n_h, n_le, n_g: the layer number of the net radiation, sensible heat flux, latent heat flux, and soil surface heat flux.
     n_t_et: the layer number of the ratio between canopy latent heat flux and total latent heat flux.
+    n_ln_s, n_ln_c, n_sn_s, n_sn_c: the layer number of the soil net longwave radiation, canopy net longwave radiation, soil net shortwave radiation, and canopy net shortwave radiation.
     pixel_size: the pixel size (e.g., 3.6 meter by 3.6 meter).
     upper_boundary: the upper threshold for all fluxes at one pixel which does not make sense, e.g., 10,000 W/m2 for LE at one pixel.
     lower_boundary: the lower threshold for all fluxes at one pixel which does not make sense, e.g., -1,500 W/m2 for LE at one pixel.
@@ -234,7 +237,27 @@ def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out
 
     raster_tet = raster_footprint*0+1
     out_tet = raster_tet*raster_tseb_ancillary[n_t_et,:,:]
-    out_tet = np.nanmean(out_tet)    
+    out_tet = np.nanmean(out_tet)
+
+    raster_ln_s = raster_tseb_ancillary[n_ln_s,:,:]
+    raster_ln_s[raster_ln_s>upper_boundary] = np.nan
+    raster_ln_s[raster_ln_s<lower_boundary] = np.nan
+    out_ln_s = raster_ln_s*raster_footprint
+    
+    raster_ln_c = raster_tseb_ancillary[n_ln_c,:,:]
+    raster_ln_c[raster_ln_c>upper_boundary] = np.nan
+    raster_ln_c[raster_ln_c<lower_boundary] = np.nan
+    out_ln_c = raster_ln_c*raster_footprint
+    
+    raster_sn_s = raster_tseb_ancillary[n_sn_s,:,:]
+    raster_sn_s[raster_sn_s>upper_boundary] = np.nan
+    raster_sn_s[raster_sn_s<lower_boundary] = np.nan
+    out_sn_s = raster_sn_s*raster_footprint
+    
+    raster_sn_c = raster_tseb_ancillary[n_ln_c,:,:]
+    raster_sn_c[raster_sn_c>upper_boundary] = np.nan
+    raster_sn_c[raster_sn_c<lower_boundary] = np.nan
+    out_sn_c = raster_sn_c*raster_footprint
 
     raster_lai[raster_lai>5] = np.nan
     raster_lai[raster_lai<0] = np.nan
@@ -255,6 +278,10 @@ def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out
         out_le = np.nansum(out_le)
         out_g = np.nansum(out_g)
         out_t = np.nansum(out_t)
+        out_ln_s = np.nansum(out_ln_s)
+        out_ln_c = np.nansum(out_ln_c)
+        out_sn_s = np.nansum(out_sn_s)
+        out_sn_c = np.nansum(out_sn_c)
         out_lai = np.nanmean(out_lai)
         out_fc = np.nanmean(out_fc)
         out_temp = np.nanmean(out_temp)
@@ -288,6 +315,10 @@ def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out
         out_le = np.nansum(out_le)
         out_g = np.nansum(out_g)
         out_t = np.nansum(out_t)
+        out_ln_s = np.nansum(out_ln_s)
+        out_ln_c = np.nansum(out_ln_c)
+        out_sn_s = np.nansum(out_sn_s)
+        out_sn_c = np.nansum(out_sn_c)
         out_lai = np.nanmean(out_lai)
         out_fc = np.nanmean(out_fc)
         out_temp_canopy = np.nanmean(out_temp_canopy)
@@ -310,5 +341,5 @@ def Footprint_Digital_Results(footprint, tseb_r_1, tseb_r_2, temp_image, dir_out
     else:
         print("Temporary files are saved in the output folder.")
 
-    return(out_rn, out_h, out_le, out_g, out_t, out_tet, out_lai, out_fc, out_temp, out_temp_canopy, out_temp_soil)
+    return(out_rn, out_h, out_le, out_g, out_t, out_tet, out_ln_s, out_ln_c, out_sn_s, out_sn_c, out_lai, out_fc, out_temp, out_temp_canopy, out_temp_soil)
     
