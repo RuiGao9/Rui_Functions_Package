@@ -5,6 +5,7 @@ def read_shapefile(shp_path):
     the geometry information. This uses the pyshp package
     """
     import shapefile
+    import pandas as pd
 
     #read file, parse out the records and shapes
     sf = shapefile.Reader(shp_path)
