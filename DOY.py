@@ -16,6 +16,7 @@ def DOY(Y,M,D):
             return Year % 400 == 0
         return Year % 4 == 0
 
+    [Y,M,D] = [int(Y),int(M),int(D)]
     if IsLeapYear(Y):
         K = 1
     else:
