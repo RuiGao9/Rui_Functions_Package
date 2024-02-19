@@ -18,22 +18,29 @@ def SolarRadiationCalculator(Latitude,DOY,Year,Print):
         DaysInYear = 366
     else:
         DaysInYear = 365
-    # Declination of the sun
-    ds = 0.4093*math.sin((2*pi*(284+DOY))/DaysInYear)
-    # Relative distance from the earth to the sun
-    dr = 1+0.033*math.cos(2*pi*DOY/DaysInYear)
-    # The sunset hour angle
-    ws = math.acos(-math.tan(Latitude)*math.tan(ds))
-    # The solar radiation in MJ/(m^2day)
-    ra = 37.6*dr*(ws*math.sin(Latitude)*math.sin(ds)+math.cos(Latitude)*math.cos(ds)*math.sin(ws))
+    try:
+        # Declination of the sun
+        ds = 0.4093*math.sin((2*pi*(284+DOY))/DaysInYear)
+        # Relative distance from the earth to the sun
+        dr = 1+0.033*math.cos(2*pi*DOY/DaysInYear)
+        # The sunset hour angle
+        ws = math.acos(-math.tan(Latitude)*math.tan(ds))
+        # The solar radiation in MJ/(m^2day)
+        ra = 37.6*dr*(ws*math.sin(Latitude)*math.sin(ds)+math.cos(Latitude)*math.cos(ds)*math.sin(ws))
 
-    if Print =="YES":
-        print("This year contains:",DaysInYear,"days.")
-        print("The declination of the sun is:",round(ds,4))
-        print("The relative distance from the earth to the sun is:",round(dr,4))
-        print("The sunset hour angle is:",round(ws,4))
-        print("The solar radiation at the location is:",round(ra,4))
-    else:
-        pass
+        if Print =="YES":
+            print("This year contains:",DaysInYear,"days.")
+            print("The declination of the sun is:",round(ds,4))
+            print("The relative distance from the earth to the sun is:",round(dr,4))
+            print("The sunset hour angle is:",round(ws,4))
+            print("The solar radiation at the location is:",round(ra,4))
+        else:
+            pass
+    except:
+        if Print =="YES":
+            print("Errors happened")
+            ra = -9999
+        else:
+            ra = -9999
 
     return(ra)
