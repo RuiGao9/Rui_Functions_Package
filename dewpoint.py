@@ -9,11 +9,11 @@ def dewpoint(rh,temp):
     Return:
     Dew point in degree C will be returned.
     '''
-	import math
 	
-	a = 17.27
-	b = 237.7
-	parmeter = a*temp/(b+temp)+math.log(rh/100)
-	td = b*parameter/(a-parameter)
-	
+    import math
+    a = 17.27
+    b = 237.7
+    alpha = a*temp/(b+temp)+math.log(rh/100)
+    td = b*alpha/(a-alpha)
+    
     return(td)
